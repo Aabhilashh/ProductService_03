@@ -1,4 +1,4 @@
-package dev.abhi.project_03.Controller;
+package dev.abhi.project_03.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
