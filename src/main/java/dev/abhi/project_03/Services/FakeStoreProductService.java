@@ -3,14 +3,17 @@ package dev.abhi.project_03.Services;
 import dev.abhi.project_03.Models.Category;
 import dev.abhi.project_03.Models.Product;
 import dev.abhi.project_03.dtos.FakeStoreProductDto;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FakeStoreProductService implements ProductService{
+public  class FakeStoreProductService implements ProductService{
 
     private  RestTemplate restTemplate;
 
@@ -37,6 +40,23 @@ public class FakeStoreProductService implements ProductService{
            products.add(convertFakeStoreProductDtoToProduct(fakeStoreProductDto));
        }
         return products;
+    }
+
+    @Override
+    public Product replaceProduct(Long productId, Product product) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Long productId, Product product) {
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(product,FakeStoreProductDto.class);
+        HttpMessageConverterExtractor<FakeStoreProductDto> responseExtractor = new HttpMessageConverterExtractor(FakeStoreProductDto.class,
+                restTemplate.getMessageConverters());
+
+        FakeStoreProductDto response = restTemplate.execute("https://fakestoreapi.com/products/"+productId,
+                HttpMethod.PATCH, requestCallback, responseExtractor);
+
+        return convertFakeStoreProductDtoToProduct(response);
     }
 
     private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {

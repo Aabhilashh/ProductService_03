@@ -1,10 +1,13 @@
 package dev.abhi.project_03.Models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @Getter
 @Setter
+
 public class Product extends BaseModel {
     private String title;
     private double price;
