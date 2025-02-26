@@ -1,7 +1,9 @@
 package dev.abhi.project_03.Controllers;
 
+import dev.abhi.project_03.Exceptions.ProductNotFoundException;
 import dev.abhi.project_03.Models.Product;
 import dev.abhi.project_03.Services.ProductService;
+import dev.abhi.project_03.dtos.ExceptionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,36 +34,37 @@ public class ProductController {
 //            //return productService.getSingleProduct(id);
 //    }
 
-//    //           2. trying responseEntity
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Product> getProductById(@PathVariable("id")Long id){
-//
-//            ResponseEntity<Product> responseEntity = new ResponseEntity<>(
-//                    productService.getSingleProduct(id),
-//                    HttpStatus.OK
-//            );
-//
-//        return responseEntity ;
-//    }
-
+    //           2. trying responseEntity
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id")Long id){
+    public ResponseEntity<Product> getProductById(@PathVariable("id")Long id) throws ProductNotFoundException {
 
-        ResponseEntity<Product> responseEntity = null;
-        try {
-            Product product = productService.getSingleProduct(id);
-            responseEntity = new ResponseEntity<>(
-                    product,
+            ResponseEntity<Product> responseEntity = new ResponseEntity<>(
+                    productService.getSingleProduct(id),
                     HttpStatus.OK
             );
-        }catch(RuntimeException e){
-            responseEntity = new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND
-            );
-        }
 
         return responseEntity ;
     }
+
+// 3. with try and catch
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Product> getProductById(@PathVariable("id")Long id){
+//
+//        ResponseEntity<Product> responseEntity = null;
+//        try {
+//            Product product = productService.getSingleProduct(id);
+//            responseEntity = new ResponseEntity<>(
+//                    product,
+//                    HttpStatus.OK
+//            );
+//        }catch(RuntimeException e){
+//            responseEntity = new ResponseEntity<>(
+//                    HttpStatus.NOT_FOUND
+//            );
+//        }
+//
+//        return responseEntity ;
+//    }
 
     @GetMapping()
     public List<Product> getAllProducts(){
@@ -78,4 +81,7 @@ public class ProductController {
 //    public Product replaceProduct( Long id, Product product){
 //            return null;
 //    }
+
+
+
 }

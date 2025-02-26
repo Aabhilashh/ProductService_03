@@ -1,5 +1,6 @@
 package dev.abhi.project_03.Services;
 
+import dev.abhi.project_03.Exceptions.ProductNotFoundException;
 import dev.abhi.project_03.Models.Category;
 import dev.abhi.project_03.Models.Product;
 import dev.abhi.project_03.dtos.FakeStoreProductDto;
@@ -20,12 +21,26 @@ public  class FakeStoreProductService implements ProductService{
     public FakeStoreProductService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
+
+    public RestTemplate getRestTemplate() {
+        return restTemplate;
+    }
+
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Override
-    public Product getSingleProduct(Long productId) {
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
+
         FakeStoreProductDto fakeStoreProductDto=
                 restTemplate.getForObject("https://fakestoreapi.com/products/" + productId,
                         FakeStoreProductDto.class
                 );
+        if(fakeStoreProductDto == null){
+            throw new ProductNotFoundException("Any data is not present with this ProductId"
+            +productId);
+        }
 
         return  convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
     }
